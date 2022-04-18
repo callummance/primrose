@@ -92,6 +92,7 @@ impl ItgioTranslator {
         device: Arc<Mutex<ItgioDevice>>,
         should_close: &AtomicBool,
     ) -> Result<()> {
+        debug!("Started monitoring lights...");
         let mut ss_buf: Vec<u8> = Vec::with_capacity(12);
 
         while !should_close.load(Ordering::Relaxed) {
@@ -110,6 +111,7 @@ impl ItgioTranslator {
         device: Arc<Mutex<ItgioDevice>>,
         should_close: &AtomicBool,
     ) -> Result<()> {
+        debug!("Started monitoring buttons...");
         let mut ss_buf: Vec<u8> = Vec::with_capacity(6);
 
         let mut last_update_time = Instant::now();
@@ -119,6 +121,7 @@ impl ItgioTranslator {
             let device = device.lock().unwrap();
             let state = device.read_buttons()?.0;
             if state != last_update_state {
+                debug!("ITGIO button state changed to {:#034b}", state);
                 last_update_state = state;
 
                 let state_ss_len = btn_bitmap_to_sextetstream(state, &mut ss_buf);

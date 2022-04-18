@@ -40,7 +40,6 @@ pub fn get_or_create_pipe(path: &str) -> Result<File> {
 }
 
 pub struct SextetStreamReader {
-    path: String,
     reader: BufReader<File>,
 }
 
@@ -49,10 +48,7 @@ impl SextetStreamReader {
         let file = get_or_create_pipe(&path)?;
         let reader = BufReader::new(file);
 
-        Ok(SextetStreamReader {
-            path: path.to_string(),
-            reader,
-        })
+        Ok(SextetStreamReader { reader })
     }
 
     pub fn read_line(&mut self, buf: &mut Vec<u8>) -> Result<()> {
@@ -62,7 +58,6 @@ impl SextetStreamReader {
 }
 
 pub struct SextetStreamWriter {
-    path: String,
     writer: File,
 }
 
@@ -70,10 +65,7 @@ impl SextetStreamWriter {
     pub fn open(path: &str) -> Result<SextetStreamWriter> {
         let writer = get_or_create_pipe(&path)?;
 
-        Ok(SextetStreamWriter {
-            path: path.to_string(),
-            writer,
-        })
+        Ok(SextetStreamWriter { writer })
     }
 
     pub fn write_line(&mut self, data: &[u8]) -> Result<()> {

@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use anyhow::{anyhow, Result};
-use log::{debug, error, info, warn};
+use log::{debug, error, info, trace, warn};
 use rusb::{
     request_type, Context, Device, DeviceHandle, Direction, Recipient, RequestType, UsbContext,
 };
@@ -167,6 +167,8 @@ impl<'a> ItgioDevice {
             ));
         }
 
+        trace!("recv: {:?}", buf);
+
         let res = u32::from_le_bytes(buf);
         //Use bitwise NOT to convert from low active to high active
         Ok(ItgioBtnStatus(!res))
@@ -188,6 +190,8 @@ impl<'a> ItgioDevice {
             &mut buf,
             REQ_TIMEOUT,
         )?;
+
+        trace!("send: {:?}", buf);
 
         if isize != EXPECTED_CONTROL_LEN {
             return Err(anyhow!(

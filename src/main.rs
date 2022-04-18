@@ -1,4 +1,4 @@
-use log::{error, warn};
+use log::{error, info, warn};
 
 use crate::device::ItgioTranslator;
 
@@ -10,22 +10,19 @@ mod sextetstream;
 const SEXTET_BASE_PATH: &'static str = "/opt/itgio";
 
 fn main() {
+    env_logger::init();
+
     let ctx = rusb::Context::new().expect("Failed to initialize libusb context");
     let found_devices =
         itgio::ItgioDevice::find_devs(ctx).expect("Failed to enumerate ITGIO devices");
     match found_devices.len() {
         0 => panic!("No matching devices found"),
-        1 => (),
+        1 => info!("Found device at {:?}", found_devices[0].ident),
         _ => warn!("Multiple matching devices found, this may not exit properly"),
     }
 
     let device_idx = 0;
     let mut device_handles: Vec<ItgioTranslator> = Vec::new();
-    //let device_handles = found_devices
-    //    .into_iter()
-    //    .map(|device| device::ItgioTranslator::init(SEXTET_BASE_PATH.to_string(), device))
-    //    .scan(initial_state, f)
-    //    .collect::<Vec<Result<ItgioTranslator>>>();
 
     for device in found_devices {
         //Initialize all devices
