@@ -1,0 +1,16 @@
+[Unit]
+Description=Translate inputs and lights between an ITG-IO board and a SextetStream
+After=local-fs.target multi-user.target
+
+StartLimitIntervalSec=600
+StartLimitBurst=10
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5s
+
+ExecStart=/usr/local/bin/primrose
+
+[Install]
+WantedBy=graphical.target

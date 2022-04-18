@@ -1,0 +1,6 @@
+Package: primrose
+Version: 0.1
+Architecture: amd64
+Maintainer: Callum Mance <callummance@gmail.com>
+Description: Translate inputs and lights between an ITG-IO board and a SextetStream
+Depends: libusb
